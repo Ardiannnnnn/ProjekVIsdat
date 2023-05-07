@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Total Cases vs Population</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <svg id="scatterplot" width="800" height="600"></svg>
+
+  <script>
+    // Define the data
+    var data = [
+      { population: 1406631776, cases: 1755 },
+      { population: 334805269, cases: 1741147 },
+      { population: 229488994, cases: 6984 },
+      { population: 216746934, cases: 3458 },
+      { population: 215353593, cases: 208134 },
+      { population: 167885689, cases: 15420 },
+      { population: 145805947, cases: 207580},
+      { population: 131562772, cases: 429421 },
+      { population: 125584838, cases: 10952618 },
+      { population: 120812698, cases: 5428 },
+    ];
+
+    // Define the chart dimensions
+    var margin = { top: 50, right: 50, bottom: 50, left: 50 };
+    var width = 1100 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
+
+    // Create the SVG element
+    var svg = d3.select("#scatterplot")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Define the scales
+    var xScale = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return d.population; })])
+      .range([0, width]);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return d.cases; })])
+      .range([height, 0]);
+
+    // Draw the scatter plot points
+    svg.selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", function(d) { return xScale(d.population); })
+      .attr("cy", function(d) { return yScale(d.cases); })
+      .attr("r", 5)
+      .attr("fill", "steelblue");
+
+    // Add x-axis
+    var xAxis = d3.axisBottom(xScale);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+    // Add y-axis
+    var yAxis = d3.axisLeft(yScale);
+    svg.append("g")
+      .call(yAxis);
+
+    // Add axis labels
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", height + margin.bottom)
+      .attr("text-anchor", "middle")
+      .text("Population");
+
+    svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -height / 2)
+      .attr("y", -margin.left)
+      .attr("dy", "1em")
+      .attr("text-anchor", "middle")
+      .text("Total Cases");
+
+    // Add chart title
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", -margin.top / 2)
+      .attr("text-anchor", "middle")
+      .text("Total Cases vs Population")
+      .attr("font-weight", "bold");
+
+    // Add labels for each data point
+    svg.selectAll("text.label")
+      .data(data)
+      .enter()
+      .append("text")
+      .attr("class", "label")
+      .attr("x", function(d) { return xScale(d.population) + 8; })
+     
+      .attr("y", function(d) { return yScale(d.cases) - 8; })
+      .text(function(d) { return "(" + d.population + ", " + d.cases + ")"; })
+      .attr("font-size", "10px");
+  </script>
+</body>
+</html>
