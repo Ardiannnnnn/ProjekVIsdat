@@ -1,0 +1,113 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>COVID-19 Total Cases by ASEAN</title>
+    <link rel="stylesheet" href="DATA/deathhighest.css">
+  </head>
+  <body>
+    <h1>COVID-19 Total Cases by ASEAN</h1>
+    <svg id="chart"></svg>
+    <br />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      // Set the dimensions of the canvas / graph
+      var margin = { top: 20, right: 150, bottom: 70, left: 350 },
+        width = 1500 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+      // Set the ranges
+      var x = d3.scaleBand().range([0, width]).padding(0.1);
+      var y = d3.scaleLinear().range([height, 0]);
+
+      // Create the SVG element and add the margin and padding
+      var svg = d3
+        .select("#chart")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Load the data
+      var data = [
+        { country: "Vietnam", totalCases: 11526508 },
+        { country: "Indonesia", totalCases: 6730289 },
+        { country: "Thailand", totalCases: 4726984 },
+        { country: "Philipina", totalCases: 4073454 },
+        { country: "Singapore", totalCases: 2217110 },
+        { country: "Brunie Darussalam", totalCases: 275220 },
+        { country: "Malaysia", totalCases: 5036593 },
+        { country: "Myanmar", totalCases: 633820 },
+        { country: "Laos", totalCases: 217973 },
+        { country: "Kamboja", totalCases: 138693 },
+      ];
+
+      // Format the data
+      data.forEach(function (d) {
+        d.totalCases = +d.totalCases;
+      });
+  // Scale the range of the data in the domains
+x.domain(
+  data.map(function (d) {
+    return d.country;
+  })
+);
+y.domain([
+  0,
+  d3.max(data, function (d) {
+    return d.totalCases;
+  }),
+]);
+
+// Append the rectangles for the bar chart
+svg
+  .selectAll(".bar")
+  .data(data)
+  .enter()
+  .append("rect")
+  .attr("class", "bar")
+  .attr("x", function (d) {
+    return x(d.country);
+  })
+  .attr("width", x.bandwidth())
+  .attr("y", function (d) {
+    return y(d.totalCases);
+  })
+  .attr("height", function (d) {
+    return height - y(d.totalCases);
+  });
+
+// Add the x Axis
+svg
+  .append("g")
+  .attr("class", "axis axis--x")
+  .attr("transform", "translate(0," + height + ")")
+  .call(d3.axisBottom(x));
+
+// Add the y Axis
+svg
+  .append("g")
+  .attr("class", "axis axis--y")
+  .call(d3.axisLeft(y));
+
+// Add the y-axis label
+svg
+  .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left)
+  .attr("x", 0 - height / 2)
+  .attr("dy", "1em")
+  .style("text-anchor", "middle")
+  .call(d3.axisBottom(y));
+ 
+
+// Add the chart title
+svg
+  .append("text")
+  .attr("x", width / 2)
+  .attr("y",-3  - margin.top / 5)
+  .attr("text-anchor", "middle")
+  .style("font-size", "20px")
+</script>
+
+</body>
+</html>
+     

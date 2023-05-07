@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<br>
+<head>
+  <title>COVID-19 Cases, Deaths, and Recoveries</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .line {
+      fill: none;
+      stroke-width: 2px;
+    }
+    
+    .axis text {
+      font-size: 12px;
+    }
+    
+    .legend {
+      font-size: 12px;
+    }
+
+    .button{
+      display: inline-block;
+    }  
+
+    button{
+      display: inline-block;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <svg id="chart" width="800" height="600"></svg>
+
+  <script>
+    // Define the data
+    var data = [
+      { country: "Vietnam", cases: 11526508, deaths: 43186, recovered: 10612479 },
+      { country: "Indonesia", cases: 6730289, deaths: 160817, recovered: 6565208 },
+      { country: "Thailand", cases: 4726984, deaths: 33865, recovered: 4692636 },
+      { country: "Philipina", cases: 4073454, deaths: 65802, recovered: 3998048 },
+      { country: "Singapore", cases: 2217110, deaths: 1722, recovered: 2144490 },
+      { country: "Brunei Darussalam", cases: 275220, deaths: 225, recovered: 243601 },
+      { country: "Malaysia", cases: 5036593, deaths: 36942, recovered: 4989861 },
+      { country: "Myanmar", cases: 633820, deaths: 19490, recovered: 614299},
+      { country: "Laos", cases: 217973, deaths: 758, recovered:""},
+      { country: "Kamboja", cases: 138693, deaths: 3056, recovered: 135624 },
+    ];
+
+    // Define the chart dimensions
+    var margin = { top: 50, right: 50, bottom: 50, left: 100 };
+    var width = 900 - margin.left - margin.right;
+    var height = 500 - margin.top - margin.bottom;
+
+    // Create the SVG element
+    var svg = d3.select("#chart")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Define the scales
+    var xScale = d3.scaleBand()
+      .domain(data.map(function(d) { return d.country; }))
+      .range([0, width])
+      .padding(0.1);
+
+    var yScale = d3.scaleLinear()
+      .domain([0, d3.max(data, function(d) { return d3.max([d.cases, d.deaths, d.recovered]); })])
+      .range([height, 0]);
+      
+
+    // Define the line generator
+    var line = d3.line()
+      .x(function(d) { return xScale(d.country) + xScale.bandwidth() / 2; })
+      .y(function(d) { return yScale(d.value); });
+
+    // Draw the lines
+    var casesLine = svg.append("path")
+      .datum(data)
+      .attr("d", line.y(function(d) { return yScale(d.cases); }))
+      .attr("class", "line")
+      .style("stroke", "blue");
+
+    var deathsLine = svg.append("path")
+      .datum(data)
+      .attr("d", line.y(function(d) { return yScale(d.deaths); }))
+      .attr("class", "line")
+      .style("stroke", "red");
+
+    var recoveredLine = svg.append("path")
+      .datum(data)
+      .attr("d", line.y(function(d) { return yScale(d.recovered); }))
+      .attr("class", "line")
+      .style("stroke", "green");
+
+    // Add axes
+    var xAxis = d3.axisBottom(xScale);
+    var yAxis = d3.axisLeft(yScale);
+
+    svg.append("g")
+      .attr("class", "x-axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+    svg.append("g")
+    .attr("class", "y-axis")
+    .call(yAxis);
+    // Add chart title
+svg.append("text")
+.attr("x", (width / 2))
+.attr("y", 0 - (margin.top / 2))
+.attr("text-anchor", "middle")
+.text("COVID-19 Cases, Deaths, and Recoveries")
+.attr("class", "chart-title");
+
+// Add legend
+var legend = svg.append("g")
+.attr("class", "legend")
+.attr("transform", "translate(" + (width - 100) + "," + (height - 20) + ")");
+
+legend.append("rect")
+.attr("width", 10)
+.attr("height", 10)
+.attr("y", -310)
+.attr("fill", "blue");
+
+legend.append("text")
+.attr("x", 15)
+.attr("y", -300)
+.text("Total Cases");
+
+legend.append("rect")
+.attr("width", 10)
+.attr("height", 10)
+.attr("y", -310)
+.attr("fill", "red")
+.attr("transform", "translate(0, 20)");
+
+legend.append("text")
+.attr("x", 15)
+.attr("y", -280)
+.text("Total Deaths");
+
+legend.append("rect")
+.attr("width", 10)
+.attr("height", 10)
+.attr("y", -310)
+.attr("fill", "green")
+.attr("transform", "translate(0, 40)");
+
+legend.append("text")
+.attr("x", 15)
+.attr("y", -260)
+.text("Total Recovered");
+</script>
+</body>
+
+<div class="button">
+  <a href="totaldeath_asean.html">
+    <button style="background-color:rgb(250, 64, 64)">
+      Total Deaths
+    </button>
+  </a>
+
+
+  <a href="totalcases_asean.html">
+    <button style="background-color:rgb(64, 64, 250)">
+      Total Cases
+    </button>
+  </a>
+
+  <a href="totalrecover_asean.html">
+    <button style="background-color:rgb(22, 218, 0)">
+      Total Recovered
+    </button>
+  </a>
+
+</div>
+
+ 
+
+</html>
