@@ -79,4 +79,18 @@
       font-size: 8px;
     }
   }
+
+  /* fill At Asean */
   
+  .line {
+    fill: none;
+    stroke-width: 3px;
+  }
+  
+  .axis text {
+    font-size: 12px;
+  }
+  
+  .legend {
+    font-size: 12px;
+  }
