@@ -101,8 +101,7 @@ svg.append("text")
   .attr("y", -250)
   .attr("text-anchor", "middle")
   .style("font-size", "16px")
-  .style("text-decoration", "underline")
-  .text("Total Test Around Country Depanding From Descading");
+  .text("Total Test Around Country Depanding From Descading and Population");
 
 // make title for the legend
 svg.append("text")
